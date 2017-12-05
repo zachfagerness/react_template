@@ -2,18 +2,24 @@
 echo "Please enter project name as it is on github:"
 read NAME
 mkdir $NAME
+echo -e "\033[1;31m Created file $NAME \033[0m"
 cd $NAME
 git init
+echo -e "\033[1;31m Initilized Git \033[0m"
 mkdir bin css src www
+echo -e "\033[1;31m Created Directories \033[0m"
 touch .babelrc .gitignore README.md webpack.config.js src/index.js www/index.html css/styles.css package.json
+echo -e "\033[1;31m Created Files \033[0m"
 echo node_modules > .gitignore
 echo .DS_store >> .gitignore
 echo {\"presets\": [\"react\", \"es2015\"]} > .babelrc
+echo -e "\033[1;31m Wrote .gitignore && .babelrc \033[0m"
 cat <<EOT >> README.md
 # Test project
 This is where I test lots of new things and find ways to make stuff work.
 It is likely this whole repo will be deleted every once in a while.
 EOT
+echo -e "\033[1;31m Wrote README \033[0m"
 cat <<EOT >> package.json
 {
   "name": "$NAME",
@@ -40,8 +46,10 @@ cat <<EOT >> package.json
   }
 }
 EOT
+echo -e "\033[1;31m Wrote package.json && prepare to install node_modules \033[0m"
 npm i css-loader react react-dom style-loader --save
 npm i babel-core babel-loader babel-preset-es2015 babel-preset-react webpack webpack-dev-server --save-dev
+echo -e "\033[1;31m node_modules installed \033[0m"
 cat <<EOT >> www/index.html
 <!doctype html>
 <html>
@@ -61,6 +69,7 @@ cat <<EOT >> www/index.html
   </body>
 </html>
 EOT
+echo -e "\033[1;31m Wrote index.html \033[0m"
 cat <<EOT >> src/index.js
 import React,{Component} from 'react';
 import ReactDOM from 'react-dom';
@@ -78,6 +87,7 @@ ReactDOM.render(
   document.getElementById('ReactTarget')
 );
 EOT
+echo -e "\033[1;31m Wrote index.js \033[0m"
 cat <<EOT >> webpack.config.js
 const path = require('path');
 const webpack = require('webpack');
@@ -108,13 +118,16 @@ module.exports = {
      }
 };
 EOT
+echo -e "\033[1;31m Wrote webpack.config.js \033[0m"
 cat <<EOT >> css/styles.css
 .btn{
   color:red;
 }
 EOT
+echo -e "\033[1;31m Wrote styles.css \033[0m"
 git add .
 git commit -m "Template Init Commit"
 git remote add origin https://github.com/zachfagerness/$NAME.git
 git push -u origin master
+echo -e "\033[1;31m Commited to git && pushed to Github \033[0m"
 npm run dev
