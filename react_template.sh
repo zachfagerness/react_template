@@ -90,7 +90,7 @@ module.exports = {
       contentBase: 'www'
     },
     output: {
-        path: path.resolve(__dirname, '/www'),
+        path: path.resolve(__dirname, 'bin'),
         filename: 'bundle.js'
     },
     plugins: [
