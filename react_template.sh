@@ -12,6 +12,7 @@ touch .babelrc .gitignore README.md webpack.pro.js webpack.dev.js src/index.js w
 echo  "\033[1;31m Created Files \033[0m"
 echo node_modules > .gitignore
 echo .DS_store >> .gitignore
+echo bin >> .gitignore
 echo {\"presets\": [\"react\", \"es2015\"]} > .babelrc
 echo  "\033[1;31m Wrote .gitignore && .babelrc \033[0m"
 cat <<EOT >> README.md
