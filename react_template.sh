@@ -8,7 +8,7 @@ git init
 echo  "\033[1;31m Initilized Git \033[0m"
 mkdir bin css src www
 echo  "\033[1;31m Created Directories \033[0m"
-touch .babelrc .gitignore README.md webpack.config.js src/index.js www/index.html css/styles.css package.json
+touch .babelrc .gitignore README.md webpack.pro.js webpack.dev.js src/index.js www/index.html css/styles.css package.json
 echo  "\033[1;31m Created Files \033[0m"
 echo node_modules > .gitignore
 echo .DS_store >> .gitignore
@@ -27,8 +27,8 @@ cat <<EOT >> package.json
   "description": "React Webpack template with css loader and hot reload",
   "main": "www/index.html",
   "scripts": {
-    "pro": "node_modules/.bin/webpack",
-    "dev": "node_modules/.bin/webpack-dev-server"
+    "pro": "node_modules/.bin/webpack --config webpack.pro.js",
+    "dev": "node_modules/.bin/webpack-dev-server --config webpack.dev.js"
   },
   "repository": {
     "type": "git",
@@ -74,6 +74,7 @@ cat <<EOT >> src/index.js
 import React,{Component} from 'react';
 import ReactDOM from 'react-dom';
 import styles from '../css/styles.css';
+if (process.env.NODE_ENV !== 'production') {console.log('DEVELOPMENT MODE');}
 
 class Root extends Component{
   render(){
@@ -88,19 +89,53 @@ ReactDOM.render(
 );
 EOT
 echo  "\033[1;31m Wrote index.js \033[0m"
-cat <<EOT >> webpack.config.js
+cat <<EOT >> webpack.pro.js
+const path = require('path');
+const webpack = require('webpack');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+module.exports = {
+  entry: [
+    './src/index.js'
+  ],
+  output: {
+      path: path.resolve(__dirname, 'bin'),
+      filename: 'bundle.js'
+  },
+  devtool: 'source-map',
+  plugins: [
+    new UglifyJSPlugin({
+      sourceMap: false
+    }),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('production')
+    })
+  ],
+   module: {
+       loaders: [
+         {
+             test: /\.js$/,
+             exclude: /node_modules/,
+             loader: 'babel-loader'
+         },
+         { test: /\.css$/, loader: "style-loader!css-loader" }
+       ]
+   }
+};
+EOT
+cat <<EOT >> webpack.dev.js
 const path = require('path');
 const webpack = require('webpack');
 module.exports = {
     entry: [
       './src/index.js'
     ],
+    devtool: 'eval-source-map',
     devServer: {
       hot:true,
+      inline:true,
       contentBase: 'www'
     },
     output: {
-        path: path.resolve(__dirname, 'bin'),
         filename: 'bundle.js'
     },
     plugins: [
@@ -118,7 +153,7 @@ module.exports = {
      }
 };
 EOT
-echo  "\033[1;31m Wrote webpack.config.js \033[0m"
+echo  "\033[1;31m Wrote webpack.pro.js && webpackdev.js \033[0m"
 cat <<EOT >> css/styles.css
 .btn{
   color:red;
